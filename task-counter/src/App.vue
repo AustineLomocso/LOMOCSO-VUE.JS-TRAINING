@@ -48,8 +48,8 @@ function removeTask(id) {
 
 }
 
-// Carousel state — switch between Day 1 and Day 2 views
-const slides = ['Day 1 — Task Counter', 'Day 2 — Task Cards']
+// Carousel state — switch between Day 1, Day 2 and Day 3 views
+const slides = ['Day 1 — Task Counter', 'Day 2 — Task Cards', 'Day 3 — Routing']
 const currentSlide = ref(0)
 function goToSlide(i) { currentSlide.value = i }
 function nextSlide() { currentSlide.value = (currentSlide.value + 1) % slides.length }
@@ -148,6 +148,23 @@ function prevSlide() { currentSlide.value = (currentSlide.value - 1 + slides.len
         <!-- ───── SLIDE 2: Day 2 — Task Cards ───── -->
         <div class="slide">
           <TaskListView />
+        </div>
+
+        <!-- ───── SLIDE 3: Day 3 — Vue Router ───── -->
+        <div class="slide">
+          <div class="router-shell">
+            <nav class="router-nav">
+              <RouterLink to="/home">Home</RouterLink>
+              <RouterLink to="/about">About</RouterLink>
+              <RouterLink to="/stats">Stats</RouterLink>
+            </nav>
+            <!-- EXTENSION: page transition — matched component fades in/out -->
+            <RouterView v-slot="{ Component }">
+              <Transition name="fade" mode="out-in">
+                <component :is="Component" />
+              </Transition>
+            </RouterView>
+          </div>
         </div>
 
       </div>
@@ -272,6 +289,43 @@ function prevSlide() { currentSlide.value = (currentSlide.value - 1 + slides.len
   box-shadow: 0 12px 40px rgba(27, 42, 74, 0.12);
   border: 1px solid #eef1f6;
 }
+
+/* ───── Day 3 router slide ───── */
+.router-shell {
+  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  padding: 24px 32px 32px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(27, 42, 74, 0.12);
+  border: 1px solid #eef1f6;
+  min-height: 360px;
+}
+.router-nav {
+  display: flex;
+  gap: 8px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eef1f6;
+}
+.router-nav a {
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.router-nav a:hover { color: #42B883; }
+.router-nav a.router-link-active {
+  background: #42B883;
+  color: #fff;
+}
+
+/* EXTENSION: fade transition between routed views */
+.fade-enter-active,
+.fade-leave-active { transition: opacity 0.25s ease; }
+.fade-enter-from,
+.fade-leave-to { opacity: 0; }
 
 .app-header {
   margin-bottom: 24px;
