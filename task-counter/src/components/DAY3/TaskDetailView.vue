@@ -51,10 +51,10 @@ function goBack() {
 </template>
 
 <style scoped>
-.detail-view { max-width: 520px; margin: 40px auto; padding: 24px; font-family: Arial, sans-serif; }
-.back-btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 6px 14px; cursor: pointer; margin-bottom: 20px; }
-.back-btn:hover { background: #f3f4f6; }
-h1 { color: #1B2A4A; font-size: 24px; margin-bottom: 12px; }
+.detail-view { padding-top: 20px; }
+.back-btn { background: #fff; border: 1px solid #dfe3ea; border-radius: 999px; padding: 7px 16px; cursor: pointer; margin-bottom: 20px; font-size: 13px; font-weight: 600; color: #64748b; transition: all 0.2s; }
+.back-btn:hover { border-color: #42B883; color: #42B883; }
+h1 { color: #1B2A4A; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 12px; }
 p { color: #4A5568; font-size: 15px; margin: 6px 0; }
 .priority { text-transform: uppercase; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
 .priority--low    { background: #d1fae5; color: #065f46; }

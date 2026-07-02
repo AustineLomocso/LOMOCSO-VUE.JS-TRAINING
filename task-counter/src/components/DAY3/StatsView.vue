@@ -41,8 +41,8 @@ const pending = computed(() => taskStore.tasks.filter(t => !t.done).length)
 </template>
 
 <style scoped>
-.stats-view { max-width: 520px; margin: 40px auto; padding: 24px; font-family: Arial, sans-serif; }
-h1 { color: #1B2A4A; margin-bottom: 20px; }
+.stats-view { padding-top: 20px; }
+h1 { color: #1B2A4A; margin: 0 0 20px; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
 .stats { display: flex; gap: 12px; margin-bottom: 20px; }
 .stat { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 18px 8px; background: #f4f6fa; border-radius: 12px; border: 1px solid #eef1f6; }
 .stat-value { font-size: 28px; font-weight: 800; color: #1B2A4A; line-height: 1; }
@@ -51,5 +51,6 @@ h1 { color: #1B2A4A; margin-bottom: 20px; }
 .stat--done .stat-value { color: #1f9d57; }
 .stat--pending { background: #fff7ed; border-color: #fde4c8; }
 .stat--pending .stat-value { color: #d97706; }
-.page-nav a { color: #42B883; text-decoration: none; font-weight: 600; }
+.page-nav a { color: #42B883; text-decoration: none; font-weight: 600; font-size: 14px; }
+.page-nav a:hover { text-decoration: underline; }
 </style>

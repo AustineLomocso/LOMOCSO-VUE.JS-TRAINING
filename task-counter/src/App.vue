@@ -1,6 +1,19 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import TaskListView from './components/TaskListView_day2.vue'
+import TaskStoreView from './components/day-4-assignment/TaskListView.vue'
+import { useUserStore } from '@/components/day-4-assignment/userStore'
+
+const userStore = useUserStore()
+const { currentUser, isLoggedIn } = storeToRefs(userStore)
+const { login, logout } = userStore
+const loginName = ref('')
+
+function handleLogin() {
+  login(loginName.value.trim())
+  loginName.value = ''
+}
 
 // TODO 1: Create a ref for the text input value (initial value: '')
 const newTaskName = ref('')
@@ -45,19 +58,42 @@ function toggleTask(id) {
 // TODO 6: Write removeTask(id) — filter out the task with this id
 function removeTask(id) {
   tasks.value = tasks.value.filter(t => t.id !== id)
+}
 
+function clearDone() {
+  tasks.value = tasks.value.filter(t => !t.done)
 }
 
 // Carousel state — switch between Day 1, Day 2 and Day 3 views
-const slides = ['Day 1 — Task Counter', 'Day 2 — Task Cards', 'Day 3 — Routing']
+const slides = ['Day 1 — Task Counter', 'Day 2 — Task Cards', 'Day 3 — Routing', 'Day 4 — Pinia Store']
 const currentSlide = ref(0)
 function goToSlide(i) { currentSlide.value = i }
 function nextSlide() { currentSlide.value = (currentSlide.value + 1) % slides.length }
 function prevSlide() { currentSlide.value = (currentSlide.value - 1 + slides.length) % slides.length }
+
+// Keyboard navigation — arrow keys switch slides, unless the user is typing
+function handleKeydown(e) {
+  const tag = e.target.tagName
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
+  if (e.key === 'ArrowRight') nextSlide()
+  if (e.key === 'ArrowLeft') prevSlide()
+}
+onMounted(() => window.addEventListener('keydown', handleKeydown))
+onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 </script>
 
 <template>
   <div class="carousel">
+    <!-- App brand header -->
+    <header class="brand">
+      <span class="brand-logo">V</span>
+      <div>
+        <p class="brand-title">Vue.js Training</p>
+        <p class="brand-sub">{{ slides[currentSlide] }}</p>
+      </div>
+      <span class="brand-day">{{ currentSlide + 1 }} / {{ slides.length }}</span>
+    </header>
+
     <!-- Carousel navigation header -->
     <div class="carousel-nav">
       <button class="nav-arrow" @click="prevSlide" aria-label="Previous">‹</button>
@@ -125,6 +161,7 @@ function prevSlide() { currentSlide.value = (currentSlide.value - 1 + slides.len
               <button :class="{ active: filter === 'all' }" @click="filter = 'all'">All</button>
               <button :class="{ active: filter === 'done' }" @click="filter = 'done'">Done</button>
               <button :class="{ active: filter === 'pending' }" @click="filter = 'pending'">Pending</button>
+              <button v-if="doneCount > 0" class="clear" @click="clearDone">Clear done</button>
             </div>
 
             <!-- TODO 10: Show this message only when the task list is empty -->
@@ -132,7 +169,7 @@ function prevSlide() { currentSlide.value = (currentSlide.value - 1 + slides.len
 
             <!-- TODO 11: Render the task list using v-for -->
             <!-- Each item needs: checkbox (v-model), task name (:class done), remove button -->
-            <ul class="task-list">
+            <TransitionGroup tag="ul" name="list" class="task-list">
               <li v-for="task in visibleTasks" :key="task.id" :class="{ 'is-done': task.done }">
                 <input type="checkbox" v-model="task.done" />
                 <span class="task-name" :class="{ done: task.done }">
@@ -141,7 +178,7 @@ function prevSlide() { currentSlide.value = (currentSlide.value - 1 + slides.len
                 </span>
                 <button @click="removeTask(task.id)">Remove</button>
               </li>
-            </ul>
+            </TransitionGroup>
           </div>
         </div>
 
@@ -167,6 +204,32 @@ function prevSlide() { currentSlide.value = (currentSlide.value - 1 + slides.len
           </div>
         </div>
 
+        <!-- ───── SLIDE 4: Day 4 — Pinia Store ───── -->
+        <div class="slide">
+          <div class="app">
+            <header class="app-header day4-header">
+              <div>
+                <h1>Pinia Store</h1>
+                <p class="subtitle">Centralized state with Pinia</p>
+              </div>
+              <div class="user-box">
+                <span v-if="isLoggedIn" class="user-greeting">👤 {{ currentUser }}</span>
+                <button v-if="isLoggedIn" class="user-btn" @click="logout">Logout</button>
+                <template v-else>
+                  <input
+                    v-model="loginName"
+                    class="user-input"
+                    placeholder="Your name..."
+                    @keyup.enter="handleLogin"
+                  />
+                  <button class="user-btn" @click="handleLogin">Login</button>
+                </template>
+              </div>
+            </header>
+            <TaskStoreView />
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -187,9 +250,56 @@ function prevSlide() { currentSlide.value = (currentSlide.value - 1 + slides.len
 <style scoped>
 /* ───── Carousel shell ───── */
 .carousel {
-  max-width: 560px;
-  margin: 48px auto;
+  max-width: 620px;
+  margin: 32px auto 48px;
   font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+}
+
+/* ───── Brand header ───── */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #42B883, #2f9d6e);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(66, 184, 131, 0.35);
+}
+.brand-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1B2A4A;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+.brand-sub {
+  margin: 0;
+  font-size: 12px;
+  color: #8a94a6;
+  font-weight: 600;
+}
+.brand-day {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 4px 12px;
+  box-shadow: 0 1px 3px rgba(27, 42, 74, 0.06);
 }
 
 .carousel-nav {
@@ -330,6 +440,53 @@ function prevSlide() { currentSlide.value = (currentSlide.value - 1 + slides.len
 .app-header {
   margin-bottom: 24px;
 }
+
+.day4-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-greeting {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1B2A4A;
+}
+
+.user-input {
+  padding: 8px 12px;
+  border: 1px solid #dfe3ea;
+  border-radius: 10px;
+  font-size: 13px;
+  width: 130px;
+}
+
+.user-input:focus {
+  outline: none;
+  border-color: #42B883;
+  box-shadow: 0 0 0 3px rgba(66, 184, 131, 0.15);
+}
+
+.user-btn {
+  padding: 8px 14px;
+  background: #42B883;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.user-btn:hover { background: #369d6f; }
 
 h1 {
   color: #1B2A4A;
@@ -543,6 +700,35 @@ h1 {
   background: #fef2f2;
   color: #dc2626;
   border-color: #fecaca;
+}
+.filter-row .clear:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+/* ───── Task list enter/leave/move animations ───── */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.25s ease;
+}
+.list-enter-from {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(16px);
+}
+.list-leave-active {
+  position: absolute;
+  width: 100%;
+}
+.list-move {
+  transition: transform 0.25s ease;
+}
+.task-list {
+  position: relative;
 }
 
 </style>
