@@ -112,7 +112,7 @@ function cancelEdit() {
 
       <!-- EXTENSION: edit mode — click name to edit, Enter/blur to save, Esc to cancel -->
       <span v-if="!editing" class="name" :title="task.done ? '' : 'Click to edit'" @click="startEdit">
-        <span v-if="task.done" class="check">✓</span>
+        <span v-if="task.done" class="check"><i class="fa-solid fa-check"></i></span>
         {{ task.name }}
       </span>
       <input
@@ -131,8 +131,13 @@ function cancelEdit() {
     </div>
 
     <div class="task-actions">
-      <button class="btn-complete" @click="emit('complete', task.id)">{{ task.done ? 'Undo' : 'Complete' }}</button>
-      <button class="btn-delete" @click="emit('delete', task.id)">Delete</button>
+      <button class="btn-complete" @click="emit('complete', task.id)">
+        <i :class="task.done ? 'fa-solid fa-rotate-left' : 'fa-solid fa-check'"></i>
+        {{ task.done ? 'Undo' : 'Complete' }}
+      </button>
+      <button class="btn-delete" @click="emit('delete', task.id)">
+        <i class="fa-solid fa-trash-can"></i> Delete
+      </button>
     </div>
   </div>
 </template>
@@ -150,42 +155,42 @@ function cancelEdit() {
   text-transform: uppercase;
   margin-right: 6px;
 }
-.priority-low    { background: #d1fae5; color: #065f46; }
-.priority-medium { background: #fef3c7; color: #92400e; }
-.priority-high   { background: #fee2e2; color: #991b1b; }
+.priority-low    { background: var(--primary-soft); color: var(--primary-hover); }
+.priority-medium { background: var(--warn-soft); color: var(--warn); }
+.priority-high   { background: var(--danger-soft); color: var(--danger); }
 
 /* ── Inline name editor ─────────────────────────────── */
 .name-input {
   flex: 1;
   font-size: 15px;
   font-weight: 600;
-  color: #1B2A4A;
-  border: 1.5px solid #42B883;
+  color: var(--text-strong);
+  border: 1.5px solid var(--primary);
   border-radius: 6px;
   padding: 3px 8px;
   outline: none;
-  background: #f0fdf4;
+  background: var(--primary-soft);
 }
 
 /* ── Existing card styles ───────────────────────────── */
 .task-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-left: 4px solid #42B883;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-left: 4px solid var(--primary);
   border-radius: 12px;
   padding: 16px 18px;
   margin-bottom: 12px;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(27, 42, 74, 0.05);
+  box-shadow: var(--shadow-soft);
 }
 .task-card:hover {
-  box-shadow: 0 6px 18px rgba(27, 42, 74, 0.1);
+  box-shadow: 0 6px 18px rgba(56, 74, 54, 0.12);
   transform: translateY(-2px);
 }
 .task-card.completed {
-  background: #f0fdf4;
-  border-color: #86efac;
-  border-left-color: #22c55e;
+  background: var(--primary-soft);
+  border-color: var(--primary-soft-border);
+  border-left-color: var(--primary);
   opacity: 0.85;
 }
 .task-header {
@@ -200,11 +205,11 @@ function cancelEdit() {
   gap: 8px;
   font-weight: 600;
   font-size: 15px;
-  color: #1B2A4A;
+  color: var(--text-strong);
 }
 .task-card.completed span.name {
   text-decoration: line-through;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 .check {
   display: inline-flex;
@@ -212,18 +217,18 @@ function cancelEdit() {
   justify-content: center;
   width: 18px;
   height: 18px;
-  background: #22c55e;
+  background: var(--primary);
   color: #fff;
   border-radius: 50%;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   text-decoration: none;
 }
 .task-header .meta {
   font-size: 12px;
   font-weight: 500;
-  color: #9ca3af;
-  background: #f4f6fa;
+  color: var(--text-muted);
+  background: var(--surface-soft);
   padding: 3px 10px;
   border-radius: 999px;
   white-space: nowrap;
@@ -234,7 +239,7 @@ function cancelEdit() {
 }
 .btn-complete {
   padding: 7px 16px;
-  background: #42B883;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -243,17 +248,19 @@ function cancelEdit() {
   font-weight: 600;
   transition: background 0.2s, transform 0.05s;
 }
-.btn-complete:hover { background: #369d6f; }
+.btn-complete i { margin-right: 4px; }
+.btn-complete:hover { background: var(--primary-hover); }
 .btn-complete:active { transform: scale(0.97); }
 .task-card.completed .btn-complete {
-  background: #e2e8f0;
-  color: #475569;
+  background: var(--surface-soft);
+  color: var(--text-body);
+  border: 1px solid var(--border-soft);
 }
-.task-card.completed .btn-complete:hover { background: #cbd5e1; }
+.task-card.completed .btn-complete:hover { background: var(--border-soft); }
 .btn-delete {
   padding: 7px 16px;
-  background: #fef2f2;
-  color: #dc2626;
+  background: var(--danger-soft);
+  color: var(--danger);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -261,5 +268,6 @@ function cancelEdit() {
   font-weight: 600;
   transition: background 0.2s;
 }
-.btn-delete:hover { background: #fee2e2; }
+.btn-delete i { margin-right: 4px; }
+.btn-delete:hover { background: var(--danger-soft-border); }
 </style>

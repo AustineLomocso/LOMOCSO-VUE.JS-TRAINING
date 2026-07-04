@@ -38,31 +38,35 @@ function handleAdd() {
     <div class="stats">
       <div class="stat">
         <span class="stat-value">{{ totalCount }}</span>
-        <span class="stat-label">Total</span>
+        <span class="stat-label"><i class="fa-solid fa-list"></i> Total</span>
       </div>
       <div class="stat stat--done">
         <span class="stat-value">{{ doneCount }}</span>
-        <span class="stat-label">Done</span>
+        <span class="stat-label"><i class="fa-solid fa-circle-check"></i> Done</span>
       </div>
       <div class="stat stat--pending">
         <span class="stat-value">{{ pendingCount }}</span>
-        <span class="stat-label">Pending</span>
+        <span class="stat-label"><i class="fa-regular fa-clock"></i> Pending</span>
       </div>
     </div>
 
     <div class="input-row">
       <input v-model="newTaskName" placeholder="Add a new task..." @keyup.enter="handleAdd" />
-      <button @click="handleAdd">+ Add</button>
+      <button @click="handleAdd"><i class="fa-solid fa-plus"></i> Add</button>
     </div>
 
-    <p v-if="tasks.length === 0" class="empty">No tasks yet. Add one above!</p>
+    <p v-if="tasks.length === 0" class="empty">
+      <i class="fa-regular fa-clipboard"></i> No tasks yet. Add one above!
+    </p>
 
     <!-- TODO 7: Render the task list using tasks from the store -->
     <TransitionGroup tag="ul" name="list" class="task-list">
       <li v-for="task in tasks" :key="task.id" :class="{ 'is-done': task.done }">
         <input type="checkbox" v-model="task.done" @change="toggleTask(task.id)" />
         <span class="task-name" :class="{ done: task.done }">{{ task.name }}</span>
-        <button class="remove" @click="removeTask(task.id)">Remove</button>
+        <button class="remove" @click="removeTask(task.id)">
+          <i class="fa-solid fa-trash-can"></i> Remove
+        </button>
       </li>
     </TransitionGroup>
   </div>
@@ -85,27 +89,28 @@ function handleAdd() {
   align-items: center;
   gap: 2px;
   padding: 14px 8px;
-  background: #f4f6fa;
+  background: var(--surface-soft);
   border-radius: 12px;
-  border: 1px solid #eef1f6;
+  border: 1px solid var(--border-soft);
 }
 .stat-value {
   font-size: 22px;
   font-weight: 800;
-  color: #1B2A4A;
+  color: var(--text-strong);
   line-height: 1;
 }
 .stat-label {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  color: #8a94a6;
+  color: var(--text-muted);
   font-weight: 600;
 }
-.stat--done { background: #ecfdf3; border-color: #c8f0d8; }
-.stat--done .stat-value { color: #1f9d57; }
-.stat--pending { background: #fff7ed; border-color: #fde4c8; }
-.stat--pending .stat-value { color: #d97706; }
+.stat-label i { margin-right: 3px; }
+.stat--done { background: var(--primary-soft); border-color: var(--primary-soft-border); }
+.stat--done .stat-value { color: var(--primary); }
+.stat--pending { background: var(--warn-soft); border-color: var(--warn-soft-border); }
+.stat--pending .stat-value { color: var(--warn); }
 
 .input-row {
   display: flex;
@@ -115,19 +120,21 @@ function handleAdd() {
 .input-row input {
   flex: 1;
   padding: 11px 14px;
-  border: 1px solid #dfe3ea;
+  border: 1px solid var(--border-soft);
   border-radius: 10px;
   font-size: 14px;
+  background: var(--surface);
+  color: var(--text-strong);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .input-row input:focus {
   outline: none;
-  border-color: #42B883;
-  box-shadow: 0 0 0 3px rgba(66, 184, 131, 0.15);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(60, 107, 80, 0.15);
 }
 .input-row button {
   padding: 11px 20px;
-  background: #42B883;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 10px;
@@ -136,15 +143,17 @@ function handleAdd() {
   font-size: 14px;
   transition: background 0.2s, transform 0.05s;
 }
-.input-row button:hover { background: #369d6f; }
+.input-row button i { margin-right: 5px; }
+.input-row button:hover { background: var(--primary-hover); }
 .input-row button:active { transform: scale(0.97); }
 
 .empty {
   text-align: center;
-  color: #aab2c0;
+  color: var(--text-muted);
   font-style: italic;
   margin: 36px 0;
 }
+.empty i { margin-right: 6px; }
 
 .task-list {
   position: relative;
@@ -157,39 +166,40 @@ function handleAdd() {
   align-items: center;
   gap: 12px;
   padding: 13px 14px;
-  background: white;
+  background: var(--surface);
   border-radius: 12px;
   margin-bottom: 10px;
-  border: 1px solid #eef1f6;
+  border: 1px solid var(--border-soft);
   transition: box-shadow 0.2s, transform 0.1s, opacity 0.2s;
 }
 .task-list li:hover {
-  box-shadow: 0 4px 14px rgba(27, 42, 74, 0.08);
+  box-shadow: 0 4px 14px rgba(56, 74, 54, 0.1);
   transform: translateY(-1px);
 }
 .task-list li.is-done {
-  background: #fafbfc;
-  opacity: 0.75;
+  background: var(--primary-soft);
+  border-color: var(--primary-soft-border);
+  opacity: 0.8;
 }
 .task-list li input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #42B883;
+  accent-color: var(--primary);
   cursor: pointer;
 }
 .task-name {
   flex: 1;
   font-size: 14px;
-  color: #334155;
+  color: var(--text-body);
 }
 .done {
   text-decoration: line-through;
-  color: #aab2c0;
+  color: var(--text-muted);
 }
 .task-list li .remove {
   padding: 6px 12px;
-  background: #fef2f2;
-  color: #dc2626;
+  background: var(--danger-soft);
+  color: var(--danger);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -197,7 +207,8 @@ function handleAdd() {
   font-weight: 600;
   transition: background 0.2s;
 }
-.task-list li .remove:hover { background: #fee2e2; }
+.task-list li .remove i { margin-right: 4px; }
+.task-list li .remove:hover { background: var(--danger-soft-border); }
 
 /* Enter/leave/move animations for the task list */
 .list-enter-active,

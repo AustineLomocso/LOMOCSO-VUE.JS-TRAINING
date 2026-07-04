@@ -18,17 +18,17 @@ const showErrorBanner = computed(() => route.query.error === 'notfound')
 
 <template>
   <div class="home-view">
-    <h1>📝 My Tasks</h1>
+    <h1><i class="fa-solid fa-pen-to-square header-icon"></i> My Tasks</h1>
 
     <!-- TODO 2: Show a warning banner if showErrorBanner is true -->
     <div class="error-banner" v-if="showErrorBanner">
-      ⚠️ Task not found. Redirected back to home.
+      <i class="fa-solid fa-triangle-exclamation"></i> Task not found. Redirected back to home.
     </div>
 
     <nav class="page-nav">
       <!-- TODO 3: Add a RouterLink to /about (+ /stats extension) -->
-      <RouterLink to="/about">About</RouterLink>
-      <RouterLink to="/stats">Stats</RouterLink>
+      <RouterLink to="/about"><i class="fa-solid fa-circle-info"></i> About</RouterLink>
+      <RouterLink to="/stats"><i class="fa-solid fa-chart-simple"></i> Stats</RouterLink>
     </nav>
 
     <!-- TODO 4 & 5: Render each task as a RouterLink to /task/:id -->
@@ -44,17 +44,20 @@ const showErrorBanner = computed(() => route.query.error === 'notfound')
 
 <style scoped>
 .home-view { padding-top: 20px; }
-h1 { color: #1B2A4A; margin: 0 0 16px; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
-.error-banner { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; color: #92400e; font-size: 14px; }
+h1 { color: var(--text-strong); margin: 0 0 16px; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+.header-icon { color: var(--primary); font-size: 19px; margin-right: 4px; }
+.error-banner { background: var(--warn-soft); border: 1px solid var(--warn-soft-border); border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; color: var(--warn); font-size: 14px; }
+.error-banner i { margin-right: 5px; }
 .page-nav { display: flex; gap: 16px; margin-bottom: 20px; }
-.page-nav a { color: #42B883; text-decoration: none; font-weight: 600; font-size: 14px; }
+.page-nav a { color: var(--primary); text-decoration: none; font-weight: 600; font-size: 14px; }
+.page-nav a i { margin-right: 4px; }
 .page-nav a:hover { text-decoration: underline; }
 /* EXTENSION: active-link styling — vue-router adds .router-link-active automatically */
-.page-nav a.router-link-active { color: #1B2A4A; font-weight: 700; text-decoration: underline; }
+.page-nav a.router-link-active { color: var(--text-strong); font-weight: 700; text-decoration: underline; }
 .task-list { list-style: none; padding: 0; margin: 0; }
-.task-list li { background: white; border-radius: 12px; margin-bottom: 10px; border: 1px solid #eef1f6; transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s; }
-.task-list li:hover { border-color: #42B883; box-shadow: 0 4px 14px rgba(27, 42, 74, 0.08); transform: translateY(-1px); }
-.task-list li a { text-decoration: none; color: #334155; display: flex; align-items: center; justify-content: space-between; padding: 13px 14px; font-size: 14px; }
-.task-list li a::after { content: '›'; color: #cbd5e1; font-size: 18px; line-height: 1; }
-.done { text-decoration: line-through; color: #9ca3af; }
+.task-list li { background: var(--surface); border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border-soft); transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s; }
+.task-list li:hover { border-color: var(--primary); box-shadow: 0 4px 14px rgba(56, 74, 54, 0.1); transform: translateY(-1px); }
+.task-list li a { text-decoration: none; color: var(--text-body); display: flex; align-items: center; justify-content: space-between; padding: 13px 14px; font-size: 14px; }
+.task-list li a::after { content: '›'; color: var(--text-muted); font-size: 18px; line-height: 1; }
+.done { text-decoration: line-through; color: var(--text-muted); }
 </style>
