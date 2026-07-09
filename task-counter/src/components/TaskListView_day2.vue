@@ -34,7 +34,7 @@ function handleUpdate({ id, name }) {
 <template>
   <div class="task-list-view">
     <div class="list-header">
-      <h1>My Tasks</h1>
+      <h1><i class="fa-solid fa-layer-group header-icon"></i> My Tasks</h1>
       <span class="count-badge">{{ tasks.length }}</span>
     </div>
 
@@ -64,10 +64,10 @@ function handleUpdate({ id, name }) {
 .task-list-view {
   padding: 32px;
   font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
-  background: #ffffff;
+  background: var(--surface);
   border-radius: 18px;
-  border: 1px solid #eef1f6;
-  box-shadow: 0 12px 40px rgba(27, 42, 74, 0.12);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-card);
 }
 .list-header {
   display: flex;
@@ -76,11 +76,16 @@ function handleUpdate({ id, name }) {
   margin-bottom: 24px;
 }
 h1 {
-  color: #1B2A4A;
+  color: var(--text-strong);
   margin: 0;
   font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.5px;
+}
+.header-icon {
+  color: var(--primary);
+  font-size: 19px;
+  margin-right: 4px;
 }
 .count-badge {
   display: inline-flex;
@@ -89,7 +94,7 @@ h1 {
   min-width: 26px;
   height: 26px;
   padding: 0 8px;
-  background: #42B883;
+  background: var(--primary);
   color: #fff;
   font-size: 13px;
   font-weight: 700;
