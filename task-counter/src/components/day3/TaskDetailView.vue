@@ -7,7 +7,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useTaskStore } from '@/components/DAY3/taskStore'
+import { useTaskStore } from '@/components/day3/taskStore'
 
 // TODO 1: Get the current route and router instances
 const route  = useRoute()   // read the current route (params, query)
@@ -24,7 +24,7 @@ const task = computed(() =>
 
 // TODO 3: goBack() using programmatic navigation
 function goBack() {
-  router.push('/home')
+  router.push('/day3/home')
 }
 </script>
 

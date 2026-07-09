@@ -6,7 +6,7 @@
 -->
 <script setup>
 import { computed } from 'vue'
-import { useTaskStore } from '@/components/DAY3/taskStore'
+import { useTaskStore } from '@/components/day3/taskStore'
 
 const taskStore = useTaskStore()
 
@@ -35,7 +35,7 @@ const pending = computed(() => taskStore.tasks.filter(t => !t.done).length)
     </div>
 
     <nav class="page-nav">
-      <RouterLink to="/home"><i class="fa-solid fa-arrow-left"></i> Back to tasks</RouterLink>
+      <RouterLink to="/day3/home"><i class="fa-solid fa-arrow-left"></i> Back to tasks</RouterLink>
     </nav>
   </div>
 </template>

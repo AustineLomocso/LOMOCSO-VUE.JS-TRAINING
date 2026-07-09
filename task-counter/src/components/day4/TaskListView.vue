@@ -9,7 +9,7 @@ import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 // TODO 1: Import your store
-import { useTaskStore } from '@/components/day-4-assignment/taskStore'
+import { useTaskStore } from '@/components/day4/taskStore'
 
 // TODO 2: Get the store instance
 const taskStore = useTaskStore()

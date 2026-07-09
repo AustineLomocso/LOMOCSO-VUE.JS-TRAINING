@@ -7,7 +7,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useTaskStore } from '@/components/DAY3/taskStore'
+import { useTaskStore } from '@/components/day3/taskStore'
 
 const taskStore = useTaskStore()
 const route     = useRoute()
@@ -27,14 +27,14 @@ const showErrorBanner = computed(() => route.query.error === 'notfound')
 
     <nav class="page-nav">
       <!-- TODO 3: Add a RouterLink to /about (+ /stats extension) -->
-      <RouterLink to="/about"><i class="fa-solid fa-circle-info"></i> About</RouterLink>
-      <RouterLink to="/stats"><i class="fa-solid fa-chart-simple"></i> Stats</RouterLink>
+      <RouterLink to="/day3/about"><i class="fa-solid fa-circle-info"></i> About</RouterLink>
+      <RouterLink to="/day3/stats"><i class="fa-solid fa-chart-simple"></i> Stats</RouterLink>
     </nav>
 
     <!-- TODO 4 & 5: Render each task as a RouterLink to /task/:id -->
     <ul class="task-list">
       <li v-for="task in taskStore.tasks" :key="task.id">
-        <RouterLink :to="`/task/${task.id}`">
+        <RouterLink :to="`/day3/task/${task.id}`">
           <span :class="{ done: task.done }">{{ task.name }}</span>
         </RouterLink>
       </li>
