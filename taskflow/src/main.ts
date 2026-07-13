@@ -1,8 +1,12 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia';
 import App from './App.vue'
 import router from './router';
 
 import { IonicVue } from '@ionic/vue';
+
+/* Web camera / file-picker UI for @capacitor/camera on the web */
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -36,8 +40,12 @@ import './theme/variables.css';
 
 const app = createApp(App)
   .use(IonicVue)
+  .use(createPinia())
   .use(router);
 
 router.isReady().then(() => {
   app.mount('#app');
 });
+
+/* Register the PWA elements so Camera.getPhoto() has a web UI */
+defineCustomElements(window);
