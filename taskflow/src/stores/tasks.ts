@@ -1,4 +1,7 @@
 import { defineStore } from 'pinia';
+import { Preferences } from '@capacitor/preferences';
+
+const STORAGE_KEY = 'taskflow_tasks';
 
 export interface Task {
   id: number;
@@ -48,6 +51,26 @@ export const useTasksStore = defineStore('tasks', {
     getById: (state) => (id: number) => state.tasks.find((task) => task.id === id),
   },
   actions: {
+    async saveTasks() {
+      await Preferences.set({
+        key: STORAGE_KEY,
+        value: JSON.stringify(this.tasks),
+      });
+    },
+    async loadTasks() {
+      const { value } = await Preferences.get({ key: STORAGE_KEY });
+      if (!value) {
+        return;
+      }
+      try {
+        const parsed = JSON.parse(value);
+        if (Array.isArray(parsed)) {
+          this.tasks = parsed as Task[];
+        }
+      } catch {
+        this.tasks = [];
+      }
+    },
     addTask(payload: { title: string; description: string; priority: Task['priority'] }) {
       const nextId = this.tasks.reduce((max, t) => Math.max(max, t.id), 0) + 1;
       this.tasks.push({
@@ -57,18 +80,25 @@ export const useTasksStore = defineStore('tasks', {
         priority: payload.priority,
         done: false,
       });
+      this.saveTasks();
       return nextId;
+    },
+    removeTask(id: number) {
+      this.tasks = this.tasks.filter((t) => t.id !== id);
+      this.saveTasks();
     },
     toggleDone(id: number) {
       const task = this.tasks.find((t) => t.id === id);
       if (task) {
         task.done = !task.done;
+        this.saveTasks();
       }
     },
     addPhotoToTask(id: number, photoPath: string) {
       const task = this.tasks.find((t) => t.id === id);
       if (task) {
         task.photo = photoPath;
+        this.saveTasks();
       }
     },
   },
