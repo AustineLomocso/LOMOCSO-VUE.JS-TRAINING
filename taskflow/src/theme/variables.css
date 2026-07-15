@@ -1,2 +1,40 @@
-/* For information on how to create your own theme, please refer to:
-http://ionicframework.com/docs/theming/ */
+/* TaskFlow theme
+   Brand palette applies in both light and dark. Light-only surface polish is
+   scoped with :not(.ion-palette-dark) so the class-driven dark palette (imported
+   before this file in main.ts) still wins in dark mode. */
+
+:root {
+  /* Primary — indigo */
+  --ion-color-primary: #5468ff;
+  --ion-color-primary-rgb: 84, 104, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #4a5be0;
+  --ion-color-primary-tint: #6577ff;
+
+  /* Secondary — teal */
+  --ion-color-secondary: #0d9488;
+  --ion-color-secondary-rgb: 13, 148, 136;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #0b8278;
+  --ion-color-secondary-tint: #259f94;
+
+  /* Tertiary — violet */
+  --ion-color-tertiary: #7c3aed;
+  --ion-color-tertiary-rgb: 124, 58, 237;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #6d33d1;
+  --ion-color-tertiary-tint: #8948ef;
+}
+
+/* Light-mode surface polish: a subtly tinted page background so inset lists and
+   cards (kept pure white) lift off the page. Excluded in dark mode. */
+:root:not(.ion-palette-dark) {
+  --ion-background-color: #f6f7fb;
+  --ion-background-color-rgb: 246, 247, 251;
+  --ion-toolbar-background: #ffffff;
+  --ion-item-background: #ffffff;
+  --ion-card-background: #ffffff;
+}

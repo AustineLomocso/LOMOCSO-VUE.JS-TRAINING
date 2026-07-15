@@ -12,11 +12,13 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.2",
     "@capacitor/app": "8.1.0",
     "@capacitor/camera": "^8.2.1",
     "@capacitor/core": "8.4.1",
     "@capacitor/haptics": "8.0.2",
     "@capacitor/keyboard": "8.0.5",
+    "@capacitor/local-notifications": "^8.2.0",
     "@capacitor/preferences": "^8.0.1",
     "@capacitor/status-bar": "8.0.2",
     "@ionic/pwa-elements": "^3.4.0",
@@ -43,5 +45,5 @@
     "vitest": "^0.34.6",
     "vue-tsc": "^2.1.10"
   },
-  "description": "An Ionic project"
+  "description": "TaskFlow — an Ionic + Vue task manager with priorities, due dates, categories, and reminders."
 }

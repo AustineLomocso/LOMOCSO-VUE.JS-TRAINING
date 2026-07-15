@@ -12,30 +12,48 @@
         </ion-toolbar>
       </ion-header>
 
+      <ion-refresher slot="fixed" @ion-refresh="handleRefresh">
+        <ion-refresher-content />
+      </ion-refresher>
+
       <ion-list v-if="store.completedTasks.length" :inset="true">
-        <ion-item
-          v-for="task in store.completedTasks"
-          :key="task.id"
-          button
-          :detail="true"
-          @click="goToDetail(task.id)"
-        >
-          <ion-thumbnail v-if="task.photo" slot="start" class="thumb">
-            <ion-img :src="task.photo" />
-          </ion-thumbnail>
-          <ion-label>
-            <h2 class="done">{{ task.title }}</h2>
-            <p>{{ task.description }}</p>
-          </ion-label>
-          <ion-icon slot="end" :icon="checkmarkCircle" color="success" />
-        </ion-item>
+        <ion-item-sliding v-for="task in store.completedTasks" :key="task.id">
+          <ion-item button :detail="true" @click="goToDetail(task.id)">
+            <ion-thumbnail v-if="task.photo" slot="start" class="thumb">
+              <ion-img :src="task.photo" :alt="`Photo for ${task.title}`" />
+            </ion-thumbnail>
+            <ion-label>
+              <h2 class="done">{{ task.title }}</h2>
+              <p>{{ task.description }}</p>
+              <div v-if="task.category" class="meta">
+                <ion-chip class="cat-chip" outline>{{ task.category }}</ion-chip>
+              </div>
+            </ion-label>
+            <ion-icon
+              slot="end"
+              :icon="checkmarkCircle"
+              color="success"
+              aria-label="Completed"
+            />
+          </ion-item>
+
+          <ion-item-options side="end">
+            <ion-item-option @click="store.toggleDone(task.id)">
+              <ion-icon slot="icon-only" :icon="arrowUndoOutline" />
+            </ion-item-option>
+            <ion-item-option color="danger" @click="onDelete(task)">
+              <ion-icon slot="icon-only" :icon="trashOutline" />
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
       </ion-list>
 
-      <div v-else class="empty-state">
-        <ion-icon :icon="checkmarkDoneOutline" />
-        <h2>Nothing completed yet</h2>
-        <p>Finished tasks will show up here.</p>
-      </div>
+      <empty-state
+        v-else
+        :icon="checkmarkDoneOutline"
+        title="Nothing completed yet"
+        message="Finished tasks will show up here."
+      />
     </ion-content>
   </ion-page>
 </template>
@@ -49,19 +67,40 @@ import {
   IonContent,
   IonList,
   IonItem,
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption,
   IonLabel,
   IonIcon,
+  IonChip,
   IonThumbnail,
   IonImg,
+  IonRefresher,
+  IonRefresherContent,
 } from '@ionic/vue';
-import { checkmarkCircle, checkmarkDoneOutline } from 'ionicons/icons';
+import {
+  checkmarkCircle,
+  checkmarkDoneOutline,
+  arrowUndoOutline,
+  trashOutline,
+} from 'ionicons/icons';
 import { useRouter } from 'vue-router';
-import { useTasksStore } from '@/stores/tasks';
+import { useTasksStore, type Task } from '@/stores/tasks';
+import { useTaskActions } from '@/composables/useTaskActions';
+import EmptyState from '@/components/EmptyState.vue';
 
 const router = useRouter();
 const store = useTasksStore();
+const { deleteWithUndo } = useTaskActions();
 
 const goToDetail = (id: number) => router.push(`/tabs/tasks/${id}`);
+
+const onDelete = (task: Task) => deleteWithUndo(task);
+
+const handleRefresh = async (event: CustomEvent) => {
+  await store.loadTasks();
+  (event.target as HTMLIonRefresherElement).complete();
+};
 </script>
 
 <style scoped>
@@ -76,26 +115,13 @@ const goToDetail = (id: number) => router.push(`/tabs/tasks/${id}`);
   opacity: 0.6;
 }
 
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 64px 24px;
-  color: var(--ion-color-medium);
+.meta {
+  margin-top: 6px;
 }
 
-.empty-state ion-icon {
-  font-size: 56px;
-  margin-bottom: 12px;
-}
-
-.empty-state h2 {
-  margin: 0 0 4px;
-}
-
-.empty-state p {
+.cat-chip {
+  height: 20px;
+  font-size: 11px;
   margin: 0;
 }
 </style>
